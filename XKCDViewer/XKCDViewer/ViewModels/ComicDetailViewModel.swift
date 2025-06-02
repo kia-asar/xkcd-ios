@@ -10,6 +10,7 @@ import Foundation
 @MainActor
 final class ComicDetailViewModel: ObservableObject {
     @Published var comic: Comic?
+    @Published var isLoading = false
     @Published var errorMessage: String?
     
     private let xkcdService: XKCDServicing
@@ -19,6 +20,7 @@ final class ComicDetailViewModel: ObservableObject {
     }
     
     func fetchComic(number: Int) async {
+        isLoading = true
         errorMessage = nil
         comic = nil
         
@@ -28,5 +30,7 @@ final class ComicDetailViewModel: ObservableObject {
         } catch {
             errorMessage = error.localizedDescription
         }
+        
+        isLoading = false
     }
 }

@@ -14,27 +14,11 @@ struct ComicDetailView: View {
     
     var body: some View {
         ScrollView {
-            VStack(spacing: 20) {
-                Text(viewModel.comic?.title ?? "Comic Title")
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .multilineTextAlignment(.center)
-                
-                let comicDate = viewModel.comic?.date ?? .now
-                Text(comicDate.displayFormattedDate)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                
-                let comicImageURLString = viewModel.comic?.img ?? ""
-                AsyncImage(url: URL(string: comicImageURLString)) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .cornerRadius(8)
-                } placeholder: {
-                    Image(systemName: "photo")
-                        .font(.system(size: 80))
-                        .padding()
+            VStack {
+                if viewModel.isLoading {
+                    loadingView()
+                } else if let comic = viewModel.comic {
+                    comicContentView(comic: comic)
                 }
             }
             .padding()
@@ -43,6 +27,47 @@ struct ComicDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .task {
             await viewModel.fetchComic(number: comicNumber)
+        }
+    }
+}
+
+// MARK: - Subviews
+
+private extension ComicDetailView {
+    func loadingView() -> some View {
+        VStack(spacing: 16) {
+            ProgressView()
+                .scaleEffect(1.5)
+            
+            Text("Loading comic...")
+                .font(.headline)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(.top, 100)
+    }
+    
+    func comicContentView(comic: Comic) -> some View {
+        VStack(spacing: 20) {
+            Text(comic.title)
+                .font(.title)
+                .fontWeight(.bold)
+                .multilineTextAlignment(.center)
+            
+            Text(comic.date?.displayFormattedDate ?? "")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+            
+            AsyncImage(url: URL(string: comic.img)) { image in
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .cornerRadius(8)
+            } placeholder: {
+                Image(systemName: "photo")
+                    .font(.system(size: 80))
+                    .padding()
+            }
         }
     }
 }
