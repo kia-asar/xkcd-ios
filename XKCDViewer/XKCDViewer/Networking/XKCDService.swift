@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum XKCDError: Error, LocalizedError {
+enum XKCDError: Error, LocalizedError, Equatable {
     case invalidURL
     case invalidComicNumber
     case noData
@@ -28,16 +28,36 @@ enum XKCDError: Error, LocalizedError {
             return "Network error: \(error.localizedDescription)"
         }
     }
+    
+    static func == (lhs: XKCDError, rhs: XKCDError) -> Bool {
+        switch (lhs, rhs) {
+        case (.invalidURL, .invalidURL),
+             (.invalidComicNumber, .invalidComicNumber),
+             (.noData, .noData),
+             (.decodingError, .decodingError):
+            return true
+        case (.networkError(let lhsError), .networkError(let rhsError)):
+            return lhsError.localizedDescription == rhsError.localizedDescription
+        default:
+            return false
+        }
+    }
 }
+
+protocol URLSessioning {
+    func data(from url: URL) async throws -> (Data, URLResponse)
+}
+
+extension URLSession: URLSessioning {}
 
 protocol XKCDServicing {
     func fetchComic(number: Int) async throws -> Comic
 }
 
 final class XKCDService: XKCDServicing {
-    private let urlSession: URLSession
+    private let urlSession: URLSessioning
     
-    init(urlSession: URLSession = .shared) {
+    init(urlSession: URLSessioning = URLSession.shared) {
         self.urlSession = urlSession
     }
     
