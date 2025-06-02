@@ -35,7 +35,7 @@ struct ComicDetailView: View {
             }
             .padding()
         }
-        .navigationTitle("Comic #\(comicNumber)")
+        .navigationTitle("Comic #\(String(comicNumber))")
         .navigationBarTitleDisplayMode(.inline)
     }
 }
