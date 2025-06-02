@@ -64,9 +64,12 @@ private extension ComicDetailView {
                     .aspectRatio(contentMode: .fit)
                     .cornerRadius(8)
             } placeholder: {
-                Image(systemName: "photo")
-                    .font(.system(size: 80))
-                    .padding()
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(Color(.systemGray5))
+                    .aspectRatio(1, contentMode: .fit)
+                    .overlay {
+                        ProgressView()
+                    }
             }
         }
     }
