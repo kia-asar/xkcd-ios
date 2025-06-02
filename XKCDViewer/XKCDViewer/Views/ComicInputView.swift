@@ -10,7 +10,6 @@ import SwiftUI
 struct ComicInputView: View {
     @State private var comicNumberText = ""
     @State private var showingComicDetail = false
-    @State private var selectedComicNumber: Int?
     
     var body: some View {
         NavigationStack {
@@ -44,8 +43,15 @@ struct ComicInputView: View {
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(Color.blue)
+                            .background(isValidInput ? Color.blue : Color.gray)
                             .cornerRadius(10)
+                    }
+                    .disabled(!isValidInput)
+                    
+                    if !comicNumberText.isEmpty && !isValidInput {
+                        Text("Please enter a valid comic number")
+                            .font(.caption)
+                            .foregroundColor(.red)
                     }
                 }
                 .padding(.horizontal)
@@ -60,12 +66,23 @@ struct ComicInputView: View {
             }
         }
     }
-    
-    private func submitComic() {
+}
+
+// MARK: - Logic Helpers
+
+private extension ComicInputView {
+    var selectedComicNumber: Int? {
         guard let number = Int(comicNumberText), number > 0 else {
-            return
+            return nil
         }
-        selectedComicNumber = number
+        return number
+    }
+    var isValidInput: Bool {
+        selectedComicNumber != nil
+    }
+    
+    func submitComic() {
+        guard isValidInput else { return }
         showingComicDetail = true
     }
 }
