@@ -18,7 +18,7 @@ struct ComicDetailView: View {
                     .fontWeight(.bold)
                     .multilineTextAlignment(.center)
                 
-                Text("01/01/2025")
+                Text(Date.now.displayFormattedDate)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                 
