@@ -17,6 +17,8 @@ struct ComicDetailView: View {
             VStack {
                 if viewModel.isLoading {
                     loadingView()
+                } else if let errorMessage = viewModel.errorMessage {
+                    errorView(message: errorMessage)
                 } else if let comic = viewModel.comic {
                     comicContentView(comic: comic)
                 }
@@ -42,6 +44,32 @@ private extension ComicDetailView {
             Text("Loading comic...")
                 .font(.headline)
                 .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(.top, 100)
+    }
+    
+    func errorView(message: String) -> some View {
+        VStack(spacing: 16) {
+            Image(systemName: "exclamationmark.triangle")
+                .font(.system(size: 50))
+                .foregroundColor(.red)
+            
+            Text("Error")
+                .font(.title2)
+                .fontWeight(.semibold)
+            
+            Text(message)
+                .font(.body)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+            
+            Button("Try Again") {
+                Task {
+                    await viewModel.fetchComic(number: comicNumber)
+                }
+            }
+            .buttonStyle(.borderedProminent)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(.top, 100)
