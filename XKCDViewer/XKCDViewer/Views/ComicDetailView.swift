@@ -10,19 +10,23 @@ import SwiftUI
 struct ComicDetailView: View {
     let comicNumber: Int
     
+    @State var comic: Comic?
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                Text("Comic Title")
+                Text(comic?.title ?? "Comic Title")
                     .font(.title)
                     .fontWeight(.bold)
                     .multilineTextAlignment(.center)
                 
-                Text(Date.now.displayFormattedDate)
+                let comicDate = comic?.date ?? .now
+                Text(comicDate.displayFormattedDate)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                 
-                AsyncImage(url: nil) { image in
+                let comicImageURLString = comic?.img ?? ""
+                AsyncImage(url: URL(string: comicImageURLString)) { image in
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fit)
@@ -37,6 +41,9 @@ struct ComicDetailView: View {
         }
         .navigationTitle("Comic #\(String(comicNumber))")
         .navigationBarTitleDisplayMode(.inline)
+        .task {
+            comic = try? await XKCDService().fetchComic(number: comicNumber)
+        }
     }
 }
 
