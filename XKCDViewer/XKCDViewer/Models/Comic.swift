@@ -34,3 +34,27 @@ struct Comic: Codable, Identifiable {
         case link
     }
 }
+
+// MARK: - Computed Properties
+
+extension Comic {
+    /// Date from month, day, and year
+    var date: Date? {
+        guard let monthNum = Int(month),
+              let dayNum = Int(day),
+              let yearNum = Int(year) else {
+            return nil
+        }
+        
+        var components = DateComponents()
+        components.month = monthNum
+        components.day = dayNum
+        components.year = yearNum
+        
+        guard let date = Calendar.current.date(from: components) else {
+            return nil
+        }
+        
+        return date
+    }
+}
