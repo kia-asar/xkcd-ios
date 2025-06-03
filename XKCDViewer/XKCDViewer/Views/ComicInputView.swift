@@ -10,6 +10,7 @@ import SwiftUI
 struct ComicInputView: View {
     @State private var comicNumberText = ""
     @State private var showingComicDetail = false
+    @FocusState private var isInputFocused: Bool
     
     var body: some View {
         NavigationStack {
@@ -33,9 +34,14 @@ struct ComicInputView: View {
                 VStack(spacing: 16) {
                     TextField("Comic Number", text: $comicNumberText)
                         .keyboardType(.numberPad)
-                        .textFieldStyle(.roundedBorder)
                         .font(.title2)
                         .multilineTextAlignment(.center)
+                        .padding(16)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(isInputFocused ? Color.blue : Color(.systemGray4), lineWidth: 2)
+                        )
+                        .focused($isInputFocused)
                     
                     Button(action: submitComic) {
                         Text("View Comic")
@@ -59,6 +65,16 @@ struct ComicInputView: View {
                 Spacer()
             }
             .padding()
+            .background(Color.clear)
+            .contentShape(Rectangle())
+            .onTapGesture {
+                isInputFocused = false
+            }
+            .onAppear {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    isInputFocused = true
+                }
+            }
             .navigationDestination(isPresented: $showingComicDetail) {
                 if let comicNumber = selectedComicNumber {
                     ComicDetailView(comicNumber: comicNumber)
@@ -83,6 +99,7 @@ private extension ComicInputView {
     
     func submitComic() {
         guard isValidInput else { return }
+        isInputFocused = false
         showingComicDetail = true
     }
 }
