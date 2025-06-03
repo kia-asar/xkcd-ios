@@ -55,6 +55,17 @@
                ReferencedContainer = "container:XKCDViewer.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "66E028922DEE9E5B000EA139"
+               BuildableName = "XKCDViewerUITests.xctest"
+               BlueprintName = "XKCDViewerUITests"
+               ReferencedContainer = "container:XKCDViewer.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
