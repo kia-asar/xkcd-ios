@@ -70,6 +70,7 @@ private extension ComicDetailView {
                 }
             }
             .buttonStyle(.borderedProminent)
+            .accessibilityIdentifier("comic-retry-button")
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(.top, 100)
@@ -91,6 +92,8 @@ private extension ComicDetailView {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .cornerRadius(8)
+                    .accessibilityLabel(comic.transcript.isEmpty ? comic.alt : comic.transcript)
+                    .accessibilityIdentifier("comic-image")
             } placeholder: {
                 RoundedRectangle(cornerRadius: 8)
                     .fill(Color(.systemGray5))
@@ -121,6 +124,7 @@ private extension ComicDetailView {
             .cornerRadius(8)
         }
         .font(.footnote)
+        .accessibilityIdentifier("comic-caption-toggle")
     }
 }
 
