@@ -99,7 +99,28 @@ private extension ComicDetailView {
                         ProgressView()
                     }
             }
+            
+            let caption = comic.alt
+            if !caption.isEmpty {
+                captionView(caption: caption)
+            }
         }
+        .padding(.horizontal)
+    }
+    
+    func captionView(caption: String) -> some View {
+        DisclosureGroup("Caption") {
+            VStack(alignment: .leading, spacing: 8) {
+                Text(caption)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding()
+            .background(Color(.systemGray6))
+            .cornerRadius(8)
+        }
+        .font(.footnote)
     }
 }
 
