@@ -21,6 +21,7 @@ struct ComicInputView: View {
                     Image(systemName: "newspaper")
                         .font(.system(size: 80))
                         .foregroundColor(.blue)
+                        .accessibilityHidden(true)
                     
                     Text("XKCD Comic Viewer")
                         .font(.largeTitle)
@@ -42,6 +43,7 @@ struct ComicInputView: View {
                                 .stroke(isInputFocused ? Color.blue : Color(.systemGray4), lineWidth: 2)
                         )
                         .focused($isInputFocused)
+                        .accessibilityIdentifier("comic-number-input")
                     
                     Button(action: submitComic) {
                         Text("View Comic")
@@ -53,6 +55,7 @@ struct ComicInputView: View {
                             .cornerRadius(10)
                     }
                     .disabled(!isValidInput)
+                    .accessibilityIdentifier("view-comic-button")
                     
                     if !comicNumberText.isEmpty && !isValidInput {
                         Text("Please enter a valid comic number")
